@@ -1,0 +1,47 @@
+---
+layout: post
+title: Jenkins build status widget for Dashing
+date: 2013-04-05 21:45:02.000000000 +02:00
+categories:
+- Dashboard
+tags:
+- build
+- dashing
+- Jenkins
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '2165396'
+  _publicize_pending: '1'
+  publicize_twitter_user: steintt
+  _wpas_skip_2709801: '1'
+  _wpas_done_2709797: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:160607191;b:1;}}
+  _oembed_362f3479d5c16d193e6a06b88939912f: "{{unknown}}"
+  twitter_cards_summary_img_size: a:6:{i:0;i:279;i:1;i:329;i:2;i:3;i:3;s:24:"width="279"
+    height="329"";s:4:"bits";i:8;s:4:"mime";s:9:"image/png";}
+  _oembed_45672e1f0435643f8b6f8c6c09069f4c: "{{unknown}}"
+  _oembed_598384c28aefdb2904e25d8ebd3e31ce: "{{unknown}}"
+  _oembed_91d7f2e93fc2f758dd4ff4107af79110: "{{unknown}}"
+author: 
+---
+<p>Jenkins has a lot of great plugins, but I think it lacks a really good plugin for a dashboard/wallboard on a TV. I've tried some of them, but none gives me and the team the information we need.</p>
+<p>Some time back, much time was used to find out if our development environments where up and running or not. One of my colleagues even made a cup with the text "Is dev down?".</p>
+<p>If found out it was time to do something, then another of my co-workers found <a href="http://shopify.github.io/dashing/" target="_blank">Dashing</a> a really nice dashboarding framework based on Ruby, Sinatra and CoffeeScript.</p>
+<p>So, what do we need to know to be happy?</p>
+<p>Well I found out that we need to know if Jenkins is currently building or deploying any of our apps. As we have "one-commit-deploy" to some of our environments it might build any time.</p>
+<p>What I did was to create the <a href="https://gist.github.com/steintore/5322589" target="_blank">Jenkins Build</a> widget for Dashing. and now I'll explain what it can be used for.</p>
+<p><strong>How did the last build/deploy go?</strong></p>
+<p>[caption id="attachment_38" align="aligncenter" width="203"]<img class="wp-image-38 " alt="Build completed" src="assets/skjermbilde-2013-04-05-kl-23-03-25.png?w=254" width="203" height="240" /> Build completed[/caption]</p>
+<p>[caption id="attachment_35" align="aligncenter" width="200"]<img class="wp-image-35 " alt="Failed build" src="assets/skjermbilde-2013-04-05-kl-23-05-20.png?w=250" width="200" height="240" /> Failed build[/caption]</p>
+<h2></h2>
+<p>The two images shows us how the last build ended, the green one went OK, but the red one failed.</p>
+<p><strong>Is something building right now?</strong></p>
+<p>[caption id="attachment_36" align="aligncenter" width="200"]<img class="wp-image-36 " alt="Build in progress" src="assets/skjermbilde-2013-04-05-kl-23-04-17.png?w=250" width="200" height="240" /> Build in progress[/caption]</p>
+<p>When a build/deploy is in progress, the widget turns grey, and the meter will move towards 100% done. The progress percentage will never be 100% accurate, since it checks how long the last build took and assumes this build will take the same amount of time, but this happens very seldom.</p>
+<p>If the build takes longer than the last build, it will never go to more than 99%. When it finished, it either goes to a nice green widget or a red, failing one.</p>
+<p><strong>Will a deploy/build soon begin?</strong></p>
+<p>In my project we use Jenkins for deployment to two of our dev-environments, meaning when someone pushes to the git repo, Jenkins will see the changes and start a maven build (with deployment to Nexus) When the deployment is finished it will start another Jenkins-job to deploy the code. Based on this we want to know if a deployment will happen in the near future, this is shown as a build in progress, but with a yellowish background, as shown in the image.</p>
+<p>[caption id="attachment_37" align="aligncenter" width="205"]<img class="wp-image-37 " alt="Prebuild in progress" src="assets/skjermbilde-2013-04-05-kl-23-03-47.png?w=256" width="205" height="240" /> Prebuild in progress[/caption]</p>
+<p>Check out other widgets for Dashing here <a href="https://github.com/Shopify/dashing/wiki/Additional-Widgets" target="_blank">https://github.com/Shopify/dashing/wiki/Additional-Widgets</a></p>
