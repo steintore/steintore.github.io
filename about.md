@@ -1,11 +1,17 @@
 ---
 layout: page
-title: About
+title: About me and me blog
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+This blog is for me to try to help you, and to help myself remembering things and getting things done.
+One of the most annoying things is to do the same thing over and over again, often somebody else has 
+already done the same thing, or you could automate it.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+At daytime I work at [Kodemaker](http://kodemaker.no), a great company, with great colleagues.
+You can find all possible info about med [there](http://kodemaker.no/stein-tore), but only in Norwegian.
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+After work I'm the happy father of two kids, and I use most of my time with them, until they fall asleep.
+
+After moving out of Oslo and into a big house, I started turning it into a smart home, but it takes time.
+Many of the blog posts here will probably be about things I've done and tried, hope it is inspiring for you.

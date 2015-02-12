@@ -1,9 +1,9 @@
 # Site settings
-title: Your awesome title
+title: I wish my smart house could blog for itself
 email: stein.tore.tosse@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  A blog about what I do, learn and want to learn. 
-  I also use this blog as a notebook of useful learings
+  A blog about what I learn, and what I want to learn.
+  Also a blog to remember what I've done
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://steintore.github.io" # the base hostname & protocol for your site
 twitter_username: steintt
