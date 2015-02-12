@@ -13,12 +13,7 @@ tags:
 status: publish
 type: post
 published: true
-meta:
-  _edit_last: '2165396'
-  _publicize_pending: '1'
-  _wpas_skip_2709797: '1'
-  _wpas_skip_2709801: '1'
-author: 
+author: Stein Tore Tøsse
 ---
 <p>After I started my smart house project I've had so many ideas about what to fix and what to make, but the most important thing when I started was to make my living room comfier during the norwegian winters. So, after <a title="Installing Raspbian and openHAB on my Raspberry Pi" href="http://steintoretosse.wordpress.com/2014/02/04/installing-raspbian-and-openhab-on-my-raspberry-pi/" target="_blank">installing my Raspberry PI</a>, my <a href="http://razberry.z-wave.me/" target="_blank">Razberry</a> card and configuring my openHAB to start working I connected my two <a href="http://www.fibaro.com/en/the-fibaro-system/wall-plug" target="_blank">Fibaro wall plugs</a>.</p>
 <p>The advantage with these wall plugs are that they are quite small compared to other such wall plugs, and they can tell me how must energy the connected appliance is using. I'll take advantage of this feature later, as I don't have any temperature sensor just yet.</p>
@@ -31,64 +26,64 @@ author:
 </ol>
 <p><strong>Configure the ovens in openHAB to read consumed energy</strong><br />
 My two ovens are defined as number-items shown below. This is so that I can read the value in my rules, I'll come back to this.</p>
-<p>[code]<br />
-/* Energy measuring */<br />
-Number power_fanoven &quot;Energy fan oven	[%.1f W]&quot;  (Energy) {zwave=&quot;2:command=sensor_multilevel&quot;}<br />
-Number power_radiator &quot;Energy radiator	[%.1f W]&quot;  (Energy) {zwave=&quot;3:command=sensor_multilevel&quot;}<br />
-[/code]</p>
+<p>{% highlight java %}
+/* Energy measuring */
+Number power_fanoven "Energy fan oven	[%.1f W]"  (Energy) {zwave="2:command=sensor_multilevel"}
+Number power_radiator "Energy radiator	[%.1f W]"  (Energy) {zwave="3:command=sensor_multilevel"}
+{% endhighlight %}</p>
 <p>Then I've registered the same two plugs as items/switches so that I can easily switch them on or off:</p>
-<p>[code]<br />
+<p>{% highlight java %}
 /* Heating */<br />
-Switch switch_radiator    &quot;Radiator&quot;             (Heating){zwave=&quot;3:command=switch_binary&quot;}<br />
-Switch switch_fanoven    &quot;Fan oven&quot;             (Heating){zwave=&quot;2:command=switch_binary&quot;}<br />
-[/code]</p>
+Switch switch_radiator    "Radiator"             (Heating){zwave="3:command=switch_binary"}<br />
+Switch switch_fanoven    "Fan oven"             (Heating){zwave="2:command=switch_binary"}<br />
+{% endhighlight %}</p>
 <p>To be able to heat my living room in a "smart" way I'll have to make some rules reading and using the number-values defined above. But first I do want to show how much total energy these ovens are using at this moment, this is from my sitemap-file:</p>
-<p>[code]<br />
-Frame {<br />
-  Group item=Energy<br />
-}<br />
-[/code]</p>
+<p>{% highlight java %}
+Frame {
+  Group item=Energy
+}
+{% endhighlight %}</p>
 <p>Now I can both see the consumed energy and I can switch my heaters on or off (don't worry about the presence switch just yet, there will be a blog post about it later)</p>
 <p>[caption id="attachment_152" align="alignnone" width="235"]<a href="http://steintoretosse.files.wordpress.com/2014/03/smarthouse.png"><img class="size-medium wp-image-152" alt="smarthouse openhab " src="assets/smarthouse.png?w=235" width="235" height="300" /></a> smarthouse openhab[/caption]</p>
 <p>Then I'll have to make some rules to get this working for me, I want the living room to be warm when I get up in the morning:<br />
-[code]<br />
-rule &quot;Heat the living room&quot;<br />
-	when<br />
-		Time cron &quot;0 30 5 ? * MON-FRI&quot;<br />
-	then<br />
-		sendCommand(Heating, ON)<br />
-		pushNotification(&quot;Varme&quot;,&quot;Varming av stua har startet&quot;)<br />
-end<br />
-[/code]<br />
+{% highlight java %}
+rule "Heat the living room"
+	when
+		Time cron "0 30 5 ? * MON-FRI"
+	then
+		sendCommand(Heating, ON)
+		pushNotification("Varme","Varming av stua har startet")
+end
+{% endhighlight %}<br />
 The rule says simply: Switch on all items in the "Heating" group at 5:30 every week day. And the send a push notification to let the user know it is switched on.<br />
 So, in the weekends I do the same, but I want it to be switched on a bit later in the morning.<br />
 Next thing is to make sure the heating is being switched off at a certain time:<br />
-[code]<br />
-rule &quot;Switch of heating during the week&quot;<br />
-	when<br />
-		Time cron &quot;0 0 7 ? * MON-FRI&quot;<br />
-	then<br />
-		if (switch_radiator.state == ON || switch_fanoven.state == ON) {<br />
-			sendCommand(Heating, OFF)<br />
-			pushNotification(&quot;Heating&quot;,&quot;Heating stopped at: &quot; + Date.state.toString())<br />
-		}<br />
-end<br />
-[/code]<br />
+{% highlight java %}
+rule "Switch of heating during the week"
+	when
+		Time cron "0 0 7 ? * MON-FRI"
+	then
+		if (switch_radiator.state == ON || switch_fanoven.state == ON) {
+			sendCommand(Heating, OFF)
+			pushNotification("Heating","Heating stopped at: " + Date.state.toString())
+		}
+end
+{% endhighlight %}
 This is nice, but I don't want my living room too hot either, so I want the ovens to be switched of at a given temperature. At the moment I'll use the built in thermostat in the electric radiator and my energy measuring to check if I should switch the heating off.<br />
 I know that the electric radiator uses less than 10W when the temperature in the room has reached its preprogrammed oven temp, currently 21 degrees celsius.<br />
 So, this is the rule to fix that:<br />
-[code]<br />
-rule &quot;Switch of heating if temp for radiator is ok&quot;<br />
-	when<br />
-		Time cron &quot;0 0/5 * * * ?&quot;<br />
-	then<br />
-		var double t = new Double(power_radiator.state.toString())<br />
-		if (switch_fanoven.state == ON &amp;&amp; t &lt; 10) {<br />
-			sendCommand(Heating, OFF)<br />
-			pushNotification(&quot;Heating&quot;,&quot;The living room heating is finished&quot;)<br />
-		}<br />
-end<br />
-[/code]<br />
+{% highlight java %}
+rule "Switch of heating if temp for radiator is ok"
+	when
+		Time cron "0 0/5 * * * ?"
+	then
+		var double t = new Double(power_radiator.state.toString())
+		if (switch_fanoven.state == ON &amp;&amp; t &lt; 10) {
+			sendCommand(Heating, OFF)
+			pushNotification("Heating","The living room heating is finished")
+		}
+end
+{% endhighlight %}
 What I do is I check the energy consumption of my radiator every 5 minutes. If it is lower than 10 watt, I switch off all heating.</p>
 <p>These rules and items is the start of making my living room more comfortable in the winter. So do you have any suggestions on how I can improve it?<br />
 Some examples are:<br />

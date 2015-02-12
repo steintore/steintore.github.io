@@ -12,37 +12,31 @@ tags:
 status: publish
 type: post
 published: true
-meta:
-  _edit_last: '2165396'
-  _wpas_skip_2709797: '1'
-  _wpas_skip_2709801: '1'
-  _publicize_pending: '1'
-author: 
+author: Stein Tore Tøsse
 ---
 <p>As I've been searching the internett to find good methods of getting notifications to my phone about when something happens in my house, i stumbled across <a href="http://www.prowlapp.com/" target="_blank">Prowl</a>. It is free and easy to configure with openHAB, there's just one extra thing you'll have to remember.</p>
 <p>To set up openHAB on your Raspberry Pi, check out <a title="Installing Raspbian and openHAB on my Raspberry Pi" href="http://steintoretosse.wordpress.com/2014/02/04/installing-raspbian-and-openhab-on-my-raspberry-pi/">this</a> post.</p>
 <p>So let's configure it. First open up openhab/configurations/openhab.cfg in your choosen text editor. Then paste in the following text:</p>
-<p>[code]<br />
-########################## Prowl Action configuration #################################<br />
-#<br />
-# the apikey for authentication (generated on the Prowl website)<br />
-prowl:apikey=insert-prowl-api-key-here<br />
-# the default priority of a Prowl notifications (optional, defaults to '0')<br />
-#prowl:defaultpriority=<br />
-# the url of the Prowl public api<br />
-# (optional, defaults to 'https://prowl.weks.net/publicapi/')<br />
-prowl:url=https://api.prowlapp.com/publicapi/<br />
-[/code]</p>
+<p>
+  {% highlight bash %}
+########################## Prowl Action configuration #################################
+#
+# the apikey for authentication (generated on the Prowl website)
+prowl:apikey=insert-prowl-api-key-here
+# the url of the Prowl public api
+prowl:url=https://api.prowlapp.com/publicapi/
+  {% endhighlight %}</p>
 <p>Swap the text "insert-prowl-api-key-here" with your api-key found at the Prowl website: <a href="https://www.prowlapp.com/api_settings.php">https://www.prowlapp.com/api_settings.php</a></p>
 <p>Also, check that the 'prowl:url' is correct.</p>
 <p>Now you can make rules that sends you notifications to Prowl, like this:</p>
-<p>[code]<br />
-rule &quot;Heat the livingroom&quot;<br />
-  when<br />
-   Time cron &quot;0 30 5 * * ?&quot;<br />
-   then<br />
-     sendCommand(heating1, ON)<br />
-     sendCommand(heating2, ON)<br />
-     pushNotification(&quot;Heating&quot;,&quot;Heating of the livingroom has started&quot;)<br />
-  end<br />
-[/code]</p>
+<p>
+  {% highlight java %}
+rule "Heat the livingroom"
+  when
+   Time cron "0 30 5 * * ?"
+   then
+     sendCommand(heating1, ON)
+     sendCommand(heating2, ON)
+     pushNotification("Heating","Heating of the livingroom has started")
+  end
+{% endhighlight %}</p>

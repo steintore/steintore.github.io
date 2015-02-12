@@ -19,16 +19,7 @@ tags:
 status: publish
 type: post
 published: true
-meta:
-  _edit_last: '2165396'
-  _wpas_skip_2709801: '1'
-  _publicize_pending: '1'
-  publicize_twitter_user: steintt
-  publicize_twitter_url: http://t.co/n6vcXv8mvE
-  _wpas_done_2709797: '1'
-  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:160607191;b:1;}}
-  _wpas_skip_2709797: '1'
-author: 
+author: Stein Tore Tøsse
 ---
 <p>So, my smart house project has just begun. Luckily I had an unused Raspberry Pi lying around waiting to be used. I stopped using it earlier 'cause the SD card got corrupted all the time, and I forgot to backup it up after doing the final configurations. But now it's time to try again.</p>
 <p>I assume you got a Raspberry Pi and an SD-card. What you'll also need is a keyboard and a connected monitor/TV. Then, let's get started:</p>
@@ -42,10 +33,10 @@ author:
 <li>
 <div>
 <p>Install rpi-update (from the command line):</p>
-<p>[code language="bash"]sudo apt-get install rpi-update[/code]</p>
+<p>{% highlight bash %}sudo apt-get install rpi-update{% endhighlight %}</p>
 </div>
 </li>
-<li>Let rpi-update install the correct version (hash found in the git repository on github, last commit on 3.6.11+)[code language="bash"]sudo rpi-update 8234d5148aded657760e9ecd622f324d140ae891[/code]</li>
+<li>Let rpi-update install the correct version (hash found in the git repository on github, last commit on 3.6.11+){% highlight bash %}sudo rpi-update 8234d5148aded657760e9ecd622f324d140ae891{% endhighlight %}</li>
 </ol>
 <p>Now that this is done you can install your wireless USB-dongle, if you have one, please follow this <a href="http://www.bartbania.com/index.php/easy-wireless-configuration-for-raspberry-pi/" target="_blank">guide</a>:</p>
 <p>The next steps are based on a blog-post i <a href="http://morepootling.blogspot.no/2013/09/home-automation-with-z-wave-on.html)" target="_blank">found earlier</a></p>
@@ -54,7 +45,7 @@ author:
 <li>
 <div>
 <p>Install Z-way:</p>
-<p>[code language="bash"]wget -q -O - http://razberry.z-wave.me/install | sudo bash[/code]</p>
+<p>{% highlight bash %}wget -q -O - http://razberry.z-wave.me/install | sudo bash{% endhighlight %}</p>
 </div>
 </li>
 <li>Start a browser on a another machine and go to http://raspberry-ip:8083</li>
@@ -65,16 +56,17 @@ author:
 <li>Repeat to include all your devices</li>
 </ol>
 </li>
-<li>Stop Z-way as it cannot run at the same time as openHAB:[code language="bash"]sudo service Z-Way stop &amp;&amp; sudo update-rc.d Z-Way disable[/code]</li>
-<li>Java should already be installed, check it by typing[code language="bash"] java -version[/code]
+<li>Stop Z-way as it cannot run at the same time as openHAB:{% highlight bash %}sudo service Z-Way stop &amp;&amp; sudo update-rc.d Z-Way disable{% endhighlight %}</li>
+<li>Java should already be installed, check it by typing{% highlight bash %} java -version{% endhighlight %}
 <p><em> - </em>if it is not installed, please google it and install the newest version</li>
 <li>Now download openHAB, I got the newest version available from <a href="https://openhab.ci.cloudbees.com/job/openHAB/" target="_blank">here</a> . But if 1.4 is out, you should find the link to it <a href="https://github.com/openhab/openhab" target="_blank">here</a>. Download runtime, addons and demo-configuration</li>
-<li>Download by using wget, for example[code language="bash"]wget https://openhab.ci.cloudbees.com/job/openHAB/lastSuccessfulBuild/artifact/distribution/target/distribution-1.4.0-SNAPSHOT-runtime.zip[/code]</li>
+<li>Download by using wget, for example{% highlight bash %}wget https://openhab.ci.cloudbees.com/job/openHAB/lastSuccessfulBuild/artifact/distribution/target/distribution-1.4.0-SNAPSHOT-runtime.zip{% endhighlight %}</li>
 <li>create a folder called openhab in your home-folder</li>
 <li>unzip the runtime file to this folder</li>
 <li>unzip the addons to a different folder an copy only the z-wave binding into the openhab/addon-folder</li>
 <li>unzip the demo-configurations into the openhab-folder</li>
-<li>create the file openhab/configurations/openhab.cfg with the following content:[code language="bash"]<br />
+<li>create the file openhab/configurations/openhab.cfg with the following content:
+	{% highlight bash %}<br />
 ################################ Z-Wave  Binding ######################################<br />
 # The Z-Wave controller port. Valid values are e.g. COM1 for Windows and /dev/ttyS0 or<br />
 # /dev/ttyUSB0 for Linux<br />
@@ -82,12 +74,12 @@ zwave:port=/dev/ttyAMA0# Z-Wave binding refresh value (optional, defaults to 100
 #zwave:refresh=<br />
 # Z-Wave binding refresh interval threshold (optional, defaults to every 6 times)<br />
 #zwave:refreshThreshold=<br />
-[/code]</li>
-<li>add the following to the openhab/start.sh script (line starting with java, not at the end, but somewhere in the middle:[code] -Dgnu.io.rxtx.SerialPorts=/dev/ttyAMA0 [/code]</li>
+{% endhighlight %}</li>
+<li>add the following to the openhab/start.sh script (line starting with java, not at the end, but somewhere in the middle:{% highlight java %} -Dgnu.io.rxtx.SerialPorts=/dev/ttyAMA0 {% endhighlight %}</li>
 <li>Move the openhab/configurations/rules/demo.rules out of the openhab folder, or remove all the rules that include "say" (not yet implemented)</li>
-<li>Make sure the openhab/start.sh is runnable:[code]chmod ug+x start.sh[/code]</li>
-<li>Make sure the user starting openHAB is in the dialout-group:[code]sudo usermod -a -G dialout pi[/code]</li>
-<li>Start openHAB by running[code]./start.sh[/code]</li>
+<li>Make sure the openhab/start.sh is runnable:{% highlight java %}chmod ug+x start.sh{% endhighlight %}</li>
+<li>Make sure the user starting openHAB is in the dialout-group:{% highlight java %}sudo usermod -a -G dialout pi{% endhighlight %}</li>
+<li>Start openHAB by running{% highlight java %}./start.sh{% endhighlight %}</li>
 <li>If something goes wrong, look at the post i refer to at bullet points 12 to 14</li>
 <li>Open a web browser and go to http://raspberry-ip:8080/openhab.app?sitemap=demo</li>
 </ol>
