@@ -3,11 +3,11 @@ layout: post
 title: openHAB heats my living room when I need it
 date: 2014-03-01 14:02:49.000000000 +01:00
 categories:
-- openHAB
+- OpenHAB
 - Smart house
 tags:
-- prowl
-- raspberry pi
+- Prowl
+- Raspberry Pi
 - smarthouse
 - Z-Way
 status: publish
@@ -15,7 +15,8 @@ type: post
 published: true
 author: Stein Tore Tøsse
 ---
-<p>After I started my smart house project I've had so many ideas about what to fix and what to make, but the most important thing when I started was to make my living room comfier during the norwegian winters. So, after <a title="Installing Raspbian and openHAB on my Raspberry Pi" href="http://steintoretosse.wordpress.com/2014/02/04/installing-raspbian-and-openhab-on-my-raspberry-pi/" target="_blank">installing my Raspberry PI</a>, my <a href="http://razberry.z-wave.me/" target="_blank">Razberry</a> card and configuring my openHAB to start working I connected my two <a href="http://www.fibaro.com/en/the-fibaro-system/wall-plug" target="_blank">Fibaro wall plugs</a>.</p>
+<p>After I started my smart house project I've had so many ideas about what to fix and what to make, but the most important thing when I started was to make my living room comfier during the norwegian winters. So, after installing my Raspberry PI, my <a href="http://razberry.z-wave.me/" target="_blank">Razberry</a> card and configuring my openHAB to start working I connected my two <a href="http://www.fibaro.com/en/the-fibaro-system/wall-plug" target="_blank">Fibaro wall plugs</a>.</p>
+
 <p>The advantage with these wall plugs are that they are quite small compared to other such wall plugs, and they can tell me how must energy the connected appliance is using. I'll take advantage of this feature later, as I don't have any temperature sensor just yet.</p>
 <p>I've connected one wall plug to my electric radiator. This radiator remembers the temperature between each time it is switched off and on. The other wall plug is connected to my 2000 watt fan oven which I use to quickly heat the living room.</p>
 <p>Before writing this, I've put all my openHAB configuration on GitHub, check it out <a href="https://github.com/steintore/my-openhab-config" target="_blank">here</a></p>
@@ -44,7 +45,7 @@ Frame {
 }
 {% endhighlight %}</p>
 <p>Now I can both see the consumed energy and I can switch my heaters on or off (don't worry about the presence switch just yet, there will be a blog post about it later)</p>
-<p>[caption id="attachment_152" align="alignnone" width="235"]<a href="http://steintoretosse.files.wordpress.com/2014/03/smarthouse.png"><img class="size-medium wp-image-152" alt="smarthouse openhab " src="assets/smarthouse.png?w=235" width="235" height="300" /></a> smarthouse openhab[/caption]</p>
+<p><img class="size-medium wp-image-152" alt="smarthouse openhab " src="img/smarthouse.png?w=235" width="235" height="300" /></p>
 <p>Then I'll have to make some rules to get this working for me, I want the living room to be warm when I get up in the morning:<br />
 {% highlight java %}
 rule "Heat the living room"

@@ -1,5 +1,5 @@
 # Site settings
-title: I wish my smart house could blog for itself
+title: "I wish my smart house could blog for itself"
 email: stein.tore.tosse@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   A blog about what I learn, and what I want to learn.
@@ -10,4 +10,11 @@ twitter_username: steintt
 github_username:  steintore
 
 # Build settings
-markdown: kramdown
+#markdown: kramdown
+
+paginate: 4
+paginate_path: "page:num"
+
+markdown: rdiscount
+permalink: pretty
+highlighter: false
