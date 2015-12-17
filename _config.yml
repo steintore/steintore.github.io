@@ -17,4 +17,4 @@ paginate_path: "page:num"
 
 markdown: rdiscount
 permalink: pretty
-highlighter: false
+highlighter: pygments
